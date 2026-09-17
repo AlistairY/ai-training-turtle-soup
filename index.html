@@ -120,6 +120,30 @@ body.map-mode{background:#090f1e}
 #chapter-screen .planet-level{letter-spacing:.5px}
 .chapter-dropdown .picker-planet small{font-size:8px;letter-spacing:.3px}
 @media(max-width:600px){.case-number{font-size:10px;letter-spacing:.3px}.chapter-picker .picker-kicker{letter-spacing:.5px}#chapter-screen .planet-level{font-size:7px;letter-spacing:0}}
+
+/* Equal navigation controls and an overview that uses the space beside the fit. */
+.topbar .top-actions{align-items:center;--nav-height:54px}
+.topbar .chapter-picker>summary{height:var(--nav-height);padding:7px 15px;align-content:center}
+.topbar .top-actions>#bank-button,.topbar .top-actions>#help-button{height:var(--nav-height);display:inline-flex;align-items:center;justify-content:center;padding:0 17px;border:1px solid #6574a455;border-radius:9px;line-height:1.2}
+.case-overview{display:grid;grid-template-columns:minmax(0,1fr) 310px;align-items:start;gap:24px;margin-bottom:22px}
+.case-summary{min-width:0}
+.case-overview .case-heading{display:flex;flex-wrap:nowrap;gap:22px;align-items:flex-start;margin:0 0 16px}
+.case-overview .case-heading>div:first-child{flex:1;min-width:0;order:0}
+.case-overview .case-heading .mode-box{flex:0 0 auto;width:auto;min-width:110px;order:0;display:flex;align-items:flex-end}
+.case-overview .case-heading h1{margin:8px 0}
+.case-overview .case-return-navigation{margin:0 0 8px;padding-bottom:6px}
+.case-overview .case-navigation{margin:0 0 12px;gap:12px}
+.case-overview .case-navigation>div{gap:10px}
+.case-overview .investigation-stats{margin:0;padding:15px 18px;gap:16px}
+.case-overview .investigation-stats>div+div{padding-left:16px}
+.case-overview .investigation-stats .small-label{font-size:10px;letter-spacing:.3px}
+.case-overview .investigation-stats .stat-detail{font-size:10px}
+.case-overview .health-value{gap:10px}
+.case-overview>.fit-preview{width:100%;max-width:none;min-width:0;margin:0;order:0}
+@media(min-width:1100px){.case-overview .preview-chart{height:175px}}
+@media(min-width:701px) and (max-width:1099px){.case-overview{grid-template-columns:minmax(0,1fr) 260px;gap:18px}.case-overview .case-heading{flex-wrap:wrap;gap:10px}.case-overview .case-heading>div:first-child{flex-basis:100%}.case-overview .case-heading .mode-box{flex-direction:row;align-items:center;gap:10px}.case-overview .difficulty-badge{font-size:12px;padding:3px 10px}.case-overview .case-navigation{flex-wrap:wrap}.case-overview .investigation-stats{grid-template-columns:1fr 1fr;padding:12px;gap:12px}.case-overview .investigation-stats>.health-stat{grid-column:1/-1;border-left:0;border-top:1px solid #354153;padding:10px 0 0;display:grid;grid-template-columns:1fr auto;align-items:center}.case-overview .health-stat .stat-detail{grid-column:1/-1}}
+@media(max-width:700px){.case-overview{grid-template-columns:1fr;gap:16px}.case-overview .case-heading{flex-wrap:wrap;gap:10px;margin-bottom:12px}.case-overview .case-heading>div:first-child{flex-basis:100%}.case-overview .case-heading .mode-box{flex-direction:row;align-items:center;gap:10px;flex-wrap:wrap}.case-overview .difficulty-badge{font-size:12px;padding:3px 10px}.case-overview .mode-box .small-label,.case-overview #mode-description{font-size:10px}.case-overview .investigation-stats{padding:13px;gap:12px}.case-overview .investigation-stats>.health-stat{padding-left:0}.case-overview .case-navigation{gap:7px}.case-overview .case-navigation>div{gap:5px}.case-overview .case-navigation .quiet{font-size:10px;padding:5px}.case-overview>.fit-preview{max-width:none}.case-overview .preview-chart{height:160px}}
+@media(max-width:600px){.topbar .top-actions{--nav-height:48px}.topbar .chapter-picker>summary{padding:5px 11px}.topbar .top-actions>#bank-button,.topbar .top-actions>#help-button{padding:0 12px}}
 </style>
 </head>
 <body>
@@ -143,9 +167,10 @@ body.map-mode{background:#090f1e}
   <footer class="chapter-popup-footer"><span>选择行星，开始调查</span><span id="chapter-scroll-note">向下滚动查看更多 ↓</span></footer>
 </dialog>
 <main id="game-screen" hidden>
+  <section class="case-overview" aria-label="关卡概览"><div class="case-summary">
   <section class="case-heading" aria-labelledby="case-title">
     <div><div class="eyebrow"><span class="case-number" id="case-number">SL-C05-P05</span><span>训练异常调查</span></div><h1 id="case-title">潮汐失序</h1><p id="case-brief">Loss 停在高处，偶尔突然反弹。查看观测，找出配置里的问题，让模型重新学会这条曲线。</p></div>
-    <aside class="fit-preview" aria-label="当前模型拟合预览"><div class="fit-preview-top"><h2>拟合小窗</h2><span id="preview-run-label">初始配置</span></div><div class="mini-segmented" id="preview-switch" role="group" aria-label="选择拟合记录"><button id="preview-initial" aria-pressed="true">初始</button><button id="preview-latest" aria-pressed="false" disabled>最近修复</button></div><div class="legend"><span><i class="swatch pale dashed"></i>目标函数</span><span><i class="swatch coral"></i><span id="preview-prediction-label">模型预测</span></span></div><div class="chart-wrap preview-chart"><canvas id="preview-fit-chart" role="img" aria-label="当前模型预测与原始目标函数对比"></canvas><div class="chart-tooltip" hidden></div></div><p>最终拟合 · 免费预览，不计入观测次数</p></aside>
+
     <div class="mode-box"><span class="small-label">本题难度</span><strong id="difficulty-badge" class="difficulty-badge easy">EASY</strong><span id="mode-description">单项引导</span></div>
   </section>
   <div class="case-return-navigation"><button id="case-chapter-back" class="quiet">← 返回本章选关</button><button id="last-result-button" class="quiet" hidden>查看最近答卷 ↗</button></div><div class="case-navigation"><span id="bank-progress">0 / 30 已通关</span><div><button id="previous-case" class="quiet" aria-label="上一题">← 上一题</button><span id="case-position" class="mono">1 / 30</span><button id="next-case" class="quiet" aria-label="下一题">下一题 →</button></div></div>
@@ -153,6 +178,9 @@ body.map-mode{background:#090f1e}
     <div><span class="small-label">已查看 OBSERVABLES</span><strong class="mono" id="viewed-metric">0 <small>/ 8</small></strong><span class="stat-detail">按不同指标计数，重复查看不累加</span></div>
     <div><span class="small-label">有效观测占比</span><strong class="mono" id="precision-metric">—</strong><span class="stat-detail" id="precision-detail">尚未查看观测</span></div>
     <div class="health-stat"><span class="small-label">生命值</span><div class="health-value"><span id="life-hearts" aria-hidden="true">♥ ♥ ♥</span><strong class="mono" id="life-count">3 / 3</strong></div><span class="stat-detail" id="life-detail">首次打开无关观测 −1，耗尽即结束</span></div>
+  </section>
+  </div>
+    <aside class="fit-preview" aria-label="当前模型拟合预览"><div class="fit-preview-top"><h2>拟合小窗</h2><span id="preview-run-label">初始配置</span></div><div class="mini-segmented" id="preview-switch" role="group" aria-label="选择拟合记录"><button id="preview-initial" aria-pressed="true">初始</button><button id="preview-latest" aria-pressed="false" disabled>最近修复</button></div><div class="legend"><span><i class="swatch pale dashed"></i>目标函数</span><span><i class="swatch coral"></i><span id="preview-prediction-label">模型预测</span></span></div><div class="chart-wrap preview-chart"><canvas id="preview-fit-chart" role="img" aria-label="当前模型预测与原始目标函数对比"></canvas><div class="chart-tooltip" hidden></div></div><p>最终拟合 · 免费预览，不计入观测次数</p></aside>
   </section>
   <div id="game-status-banner" class="game-status-banner" hidden role="status"></div>
   <div class="workspace">
