@@ -83,6 +83,35 @@ body.map-mode{background:#090f1e}
 .star-region:hover .region-seal{transform:scale(1.045);filter:brightness(1.13)}
 .star-region.arriving .region-seal{filter:brightness(1.25) drop-shadow(0 0 18px #a8bcff33)}
 .star-region.complete .region-seal{filter:brightness(1.1)}
+
+/* Planet selection stays over the galaxy map in a compact, scrollable dialog. */
+#chapter-screen{width:min(760px,calc(100% - 40px));max-width:none;max-height:min(720px,84dvh);padding:0;border:1px solid #758ab052;border-radius:18px;background:#0d1525;color:#e9eeff;box-shadow:0 28px 100px #0009;overflow:hidden}
+#chapter-screen[open]{display:flex;flex-direction:column}
+#chapter-screen::backdrop{background:#03081280;backdrop-filter:blur(3px)}
+.chapter-popup-header{display:flex;align-items:center;justify-content:space-between;gap:16px;padding:18px 24px;border-bottom:1px solid #879ac52a;flex-shrink:0;background:linear-gradient(110deg,#1c293e,#111a2d)}
+.chapter-popup-header .atlas-eyebrow{font-size:9px;color:#8c9fbe;letter-spacing:1.5px}
+#chapter-select-title{font:600 26px/1.5 var(--atlas-serif);letter-spacing:2px;color:var(--star-color);margin:2px 0 0}
+.chapter-popup-actions{display:flex;align-items:center;gap:18px}.chapter-popup-actions>span{font:11px var(--mono);color:#acbdd9;white-space:nowrap}.chapter-popup-actions .close-button{width:30px;height:30px;font-size:24px}
+#chapter-screen .chapter-missions{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px;padding:18px 20px;overflow-y:auto;overflow-x:hidden;overscroll-behavior:contain;min-height:0;scrollbar-gutter:stable;scrollbar-width:thin;scrollbar-color:#60749b #10182a;background:#0d1525;isolation:isolate}
+#chapter-screen .chapter-missions::before,#chapter-screen .chapter-missions::after{display:none}
+#chapter-screen .mission-ticket{appearance:none;padding:8px 13px 13px;border:1px solid #8296c11c;border-radius:12px;background:#111c2f;text-align:left;isolation:auto;transition:background .2s,border-color .2s}
+#chapter-screen .mission-ticket:hover,#chapter-screen .mission-ticket:focus-visible{background:#192842;border-color:#9db6e89c}
+#chapter-screen .mission-ticket.selected{border-color:#92a6d65c}
+#chapter-screen .mission-ticket.won{border-color:#89bea747}
+#chapter-screen .planet-visual{width:120px;height:100px;margin:0 auto 5px;mix-blend-mode:screen;filter:none}
+#chapter-screen .planet-sprite{width:120px;height:120px}
+#chapter-screen .mission-ticket:hover .planet-visual{transform:translateY(-3px);filter:brightness(1.08)}
+#chapter-screen .planet-visual::after{display:none}
+#chapter-screen .planet-level{font-size:8px;letter-spacing:1px;margin:4px 0 12px;color:#8fa3c6}
+#chapter-screen .ticket-top{display:flex;align-items:center;justify-content:space-between}
+#chapter-screen .ticket-number{font-size:10px;color:#788cae}
+#chapter-screen .case-status{font-size:10px}
+#chapter-screen .mission-ticket h3{font:600 20px/1.5 var(--atlas-serif);letter-spacing:1px;margin:5px 0;color:#e2eaff}
+#chapter-screen .ticket-teaser{font-size:11px;line-height:1.7;min-height:38px;margin:0;color:#96a8c8}
+.chapter-popup-footer{display:flex;justify-content:space-between;gap:12px;padding:11px 24px;border-top:1px solid #8296c11c;color:#8196b8;font-size:10px;flex-shrink:0;margin:0}
+@media(max-width:650px){#chapter-screen{width:calc(100% - 24px);max-height:84dvh;border-radius:14px}.chapter-popup-header{padding:14px 16px}#chapter-select-title{font-size:23px}.chapter-popup-actions{gap:9px}.chapter-popup-actions>span{font-size:9px}#chapter-screen .chapter-missions{grid-template-columns:repeat(2,minmax(0,1fr));gap:10px;padding:12px}#chapter-screen .mission-ticket{padding:7px 10px 12px}#chapter-screen .planet-visual{width:110px;height:88px}#chapter-screen .planet-sprite{width:110px;height:110px}#chapter-screen .planet-level{font-size:7px;letter-spacing:.5px;margin-bottom:9px}#chapter-screen .mission-ticket h3{font-size:19px}#chapter-screen .ticket-teaser{font-size:10px;min-height:34px}.chapter-popup-footer{padding:10px 16px;font-size:9px}.chapter-popup-header .atlas-eyebrow{font-size:8px}}
+@media(max-width:360px){#chapter-screen .mission-ticket{padding:6px 8px 10px}#chapter-screen .planet-visual{width:95px;height:80px}#chapter-screen .planet-sprite{width:100px;height:100px}#chapter-screen .mission-ticket h3{font-size:17px}#chapter-screen .chapter-missions{gap:8px;padding:10px}.chapter-popup-actions>span{font-size:8px}}
+@media(prefers-reduced-motion:reduce){#chapter-screen .mission-ticket{transition:none}}
 </style>
 </head>
 <body>
@@ -100,12 +129,11 @@ body.map-mode{background:#090f1e}
   <section class="atlas-log" aria-labelledby="atlas-log-title"><div class="atlas-section-heading"><div><span class="atlas-eyebrow">02 / 航行日志</span><h2 id="atlas-log-title">每一封来信，都有下文。</h2><p>查看各题的当前状态与最近得分；选择记录，前往它所在的星域。</p></div><button id="map-list-button" class="atlas-text-button">全部委托 / 难度筛选 ↗</button></div><div id="world-ledger" class="world-ledger"></div></section>
   <footer class="atlas-footer"><span>观察 / 推理 / 修复</span><span class="save-status" role="status"></span></footer>
 </main>
-<main id="chapter-screen" class="atlas-screen chapter-screen" hidden aria-labelledby="chapter-select-title">
-  <nav class="atlas-breadcrumb" aria-label="当前位置"><button id="chapter-home">星系航图</button><span>/</span><span id="chapter-breadcrumb"></span><span>/ 选择行星</span></nav>
-  <section class="chapter-intro"><div><span id="chapter-select-kicker" class="atlas-eyebrow"></span><h1 id="chapter-select-title" tabindex="-1"></h1><p id="chapter-select-flavor"></p></div><div class="chapter-switches"><button id="previous-chapter" aria-label="上一个大章节">←</button><span id="chapter-select-position"></span><button id="next-chapter" aria-label="下一个大章节">→</button></div></section>
-  <div class="chapter-archive"><aside class="chapter-observatory"><div id="chapter-emblem" aria-hidden="true"></div><div class="chapter-total"><strong id="chapter-total-complete">0</strong><span>/ 6 封已解</span></div><p id="chapter-status-summary"></p><div class="chapter-note"><span>星域手记</span><p>六颗行星，六份训练档案。选择一颗行星，延续调查或开启新的探索。</p></div><p class="chapter-difficulty-note">EASY · 建立直觉<br>MEDIUM · 追查细节<br>HARD · 连接线索</p><button id="chapter-home-bottom" class="atlas-text-button">← 返回主航图</button></aside><section id="chapter-missions" class="chapter-missions" aria-label="选择子关卡"></section></div>
-  <footer class="atlas-footer"><span>题意与训练目标在进入关卡后展示</span><span class="save-status" role="status"></span></footer>
-</main>
+<dialog id="chapter-screen" class="chapter-popup" aria-labelledby="chapter-select-title">
+  <header class="chapter-popup-header"><div><span id="chapter-select-kicker" class="atlas-eyebrow"></span><h2 id="chapter-select-title" tabindex="-1"></h2></div><div class="chapter-popup-actions"><span id="chapter-total-complete"></span><button id="chapter-close" class="close-button" aria-label="关闭行星选关">×</button></div></header>
+  <section id="chapter-missions" class="chapter-missions" aria-label="选择子关卡" tabindex="0"></section>
+  <footer class="chapter-popup-footer"><span>选择行星，开始调查</span><span id="chapter-scroll-note">向下滚动查看更多 ↓</span></footer>
+</dialog>
 <main id="game-screen" hidden>
   <section class="case-heading" aria-labelledby="case-title">
     <div><div class="eyebrow"><span class="case-number" id="case-number">CASE 001</span><span>训练异常调查</span></div><h1 id="case-title">潮汐失序</h1><p id="case-brief">Loss 停在高处，偶尔突然反弹。查看观测，找出配置里的问题，让模型重新学会这条曲线。</p></div>
@@ -670,13 +698,13 @@ body.map-mode{background:#090f1e}
     const saved=caseStates.get(c.id),status=saved?.status==='won'?'won':saved?.status==='lost'?'lost':hasProgress(saved)?'started':'new',stats=caseObservationStats(c,saved?.seen||[]);
     return {saved,status,stats,label:{won:'已通关',lost:'本局结束',started:'调查中',new:'未开始'}[status],score:saved?.result?`${saved.result.score} / ${c.faults.length} 分${saved.result.mistakes.length?' · 误调 '+saved.result.mistakes.length+' 项':''}`:'尚未提交'};
   }
-  function routeTo(id,chapter){
+  function routeTo(id,chapter,{replace=false}={}){
     const url=new URL(location.href);url.hash='';['case','chapter','view'].forEach(k=>url.searchParams.delete(k));
     if(id)url.searchParams.set('case',id);else if(chapter){url.searchParams.set('view','chapter');url.searchParams.set('chapter',chapter);}else url.searchParams.set('view','map');
-    if(url.href!==location.href)try{history.pushState(null,'',url);}catch{}
+    if(url.href!==location.href)try{history[replace?'replaceState':'pushState'](null,'',url);}catch{}
   }
   function closeNavigationDialogs(){for(const d of document.querySelectorAll('dialog'))if(d.open)d.close();document.body.style.overflow='';}
-  function showNavigationScreen(id){$('chapter-picker').open=false;$('chapter-picker').hidden=id==='map-screen';$('header-lesson').hidden=true;closeNavigationDialogs();document.body.classList.add('map-mode');for(const screen of ['map-screen','chapter-screen','game-screen'])$(screen).hidden=screen!==id;updateSaveNotice();}
+  function showNavigationScreen(id){$('chapter-picker').open=false;$('chapter-picker').hidden=id==='map-screen';$('header-lesson').hidden=true;closeNavigationDialogs();document.body.classList.add('map-mode');for(const screen of ['map-screen','game-screen'])$(screen).hidden=screen!==id;updateSaveNotice();}
   function renderMap(){
     const solved=BANK.filter(c=>caseStates.get(c.id)?.status==='won').length;
     $('map-total-complete').textContent=solved;$('map-progress-fill').style.width=`${solved/BANK.length*100}%`;
@@ -686,11 +714,11 @@ body.map-mode{background:#090f1e}
     $('map-resume').dataset.resumeCase=resume.id;$('map-resume').textContent=solved===BANK.length?'重访星域 →':hasProgress(caseStates.get(resume.id))?'继续：'+resume.title+' →':solved?'下一站：'+resume.chapter.name+' →':'从初曦星系启程 →';
     $('map-regions').innerHTML=CHAPTERS.map((ch,i)=>{
       const members=BANK.filter(c=>c.chapter.id===ch.id),count=members.filter(c=>caseStates.get(c.id)?.status==='won').length;
-      return `<button class="star-region ${ch.id===shipLocation?'docked':''} ${count===6?'complete':''}" data-region="${ch.id}" aria-label="进入${ch.name}，${count} / 6 已通关" style="--star-x:${galaxyPositions[i].x}%;--star-y:${galaxyPositions[i].y}%;--galaxy-size:${galaxyPositions[i].size}px;--star-color:${chapterColors[i]}"><span class="region-seal">${galaxyArt(i)}</span><span class="region-index">${i===0?'序章 / 新手村':'星域 0'+i}</span><strong>${ch.name}</strong><span class="region-pips">${members.map(c=>`<i class="status-dot ${progressFor(c).status}"></i>`).join('')}</span><small>${count} / 6 已通关 <span>进入星域 ↗</span></small></button>`;
+      return `<button class="star-region ${ch.id===shipLocation?'docked':''} ${count===members.length?'complete':''}" data-region="${ch.id}" aria-label="进入${ch.name}，${count} / ${members.length} 已通关" style="--star-x:${galaxyPositions[i].x}%;--star-y:${galaxyPositions[i].y}%;--galaxy-size:${galaxyPositions[i].size}px;--star-color:${chapterColors[i]}"><span class="region-seal">${galaxyArt(i)}</span><span class="region-index">${i===0?'序章 / 新手村':'星域 0'+i}</span><strong>${ch.name}</strong><span class="region-pips">${members.map(c=>`<i class="status-dot ${progressFor(c).status}"></i>`).join('')}</span><small>${count} / ${members.length} 已通关 <span>进入星域 ↗</span></small></button>`;
     }).join('');
     $('world-ledger').innerHTML=CHAPTERS.map((ch,i)=>{
       const members=BANK.filter(c=>c.chapter.id===ch.id),count=members.filter(c=>caseStates.get(c.id)?.status==='won').length;
-      return `<article class="ledger-chapter" style="--star-color:${chapterColors[i]}"><button class="ledger-heading" data-open-chapter="${ch.id}"><span>0${i+1}</span><h3>${ch.name}</h3><small>${count}/6 ↗</small></button><div>${members.map(c=>{const p=progressFor(c);return `<button class="ledger-case ${p.status}" data-ledger-case="${c.id}"><span><strong>${c.title}</strong><span class="case-status ${p.status}">${p.label}</span></span><small>${p.score}${p.saved?.attempts?' · 提交 '+p.saved.attempts+' 次':''}</small><small>观测 ${p.stats.viewed} · 有效 ${p.stats.precision} · 生命 ${p.stats.lives}/3 · 提示 ${1-(p.saved?.hints.size||0)}/1</small></button>`;}).join('')}</div></article>`;
+      return `<article class="ledger-chapter" style="--star-color:${chapterColors[i]}"><button class="ledger-heading" data-open-chapter="${ch.id}"><span>0${i+1}</span><h3>${ch.name}</h3><small>${count}/${members.length} ↗</small></button><div>${members.map(c=>{const p=progressFor(c);return `<button class="ledger-case ${p.status}" data-ledger-case="${c.id}"><span><strong>${c.title}</strong><span class="case-status ${p.status}">${p.label}</span></span><small>${p.score}${p.saved?.attempts?' · 提交 '+p.saved.attempts+' 次':''}</small><small>观测 ${p.stats.viewed} · 有效 ${p.stats.precision} · 生命 ${p.stats.lives}/3 · 提示 ${1-(p.saved?.hints.size||0)}/1</small></button>`;}).join('')}</div></article>`;
     }).join('');
     if(!activeFlight)positionShip();
     updateSaveNotice();
@@ -701,21 +729,42 @@ body.map-mode{background:#090f1e}
   }
   function renderChapter(){
     const chapter=CHAPTERS.find(ch=>ch.id===mapChapter),index=CHAPTERS.indexOf(chapter),members=BANK.filter(c=>c.chapter.id===mapChapter);
-    const solved=members.filter(c=>caseStates.get(c.id)?.status==='won').length,started=members.filter(c=>progressFor(c).status==='started').length,lost=members.filter(c=>progressFor(c).status==='lost').length;
-    $('chapter-screen').style.setProperty('--star-color',chapterColors[index]);$('chapter-breadcrumb').textContent=chapter.name;
-    $('chapter-select-kicker').textContent=index===0?'PROLOGUE / 新手村':'CHAPTER 0'+index+' / 选择你的下一颗行星';
-    renderChapterPicker(chapter.id);$('chapter-select-title').textContent=chapter.name;$('chapter-select-flavor').textContent=chapter.flavor;
-    $('chapter-select-position').textContent=`0${index+1} / 05`;$('previous-chapter').disabled=index===0;$('next-chapter').disabled=index===CHAPTERS.length-1;
-    $('chapter-emblem').innerHTML=galaxyArt(index);$('chapter-total-complete').textContent=solved;$('chapter-status-summary').textContent=`${started} 题调查中 · ${lost} 题本局结束 · ${6-solved-started-lost} 题未开始`;
-    $('chapter-missions').innerHTML=['easy','medium','hard'].map((level,i)=>`<section class="mission-tier"><div class="mission-tier-heading"><span>0${i+1}</span><h2>${level.toUpperCase()}</h2><small>${['点亮第一束光','走进线索深处','把发现连成星图'][i]}</small></div><div class="mission-pair">${members.filter(c=>c.difficulty===level).map(c=>{const p=progressFor(c);return `<button class="mission-ticket ${p.status} ${mapSelection===c.id?'selected':''}" data-enter-case="${c.id}"><span class="planet-visual" style="--planet-size:${[180,155,205,170,160,190][c.chapter_position-1]}px">${planetArt((c.chapter_position-1+index)%6)}</span><span class="planet-level">${c.difficulty.toUpperCase()} · PLANET ${String(c.chapter_position).padStart(2,'0')}</span><span class="ticket-top"><span class="ticket-number">${String(c.chapter_position).padStart(2,'0')}</span><span class="case-status ${p.status}">${p.label}</span></span><h3>${c.title}</h3><p class="ticket-teaser">${c.teaser}</p><div class="ticket-score"><span>最近答卷</span><strong>${p.score}</strong><small>提交 ${p.saved?.attempts||0} 次</small></div><div class="ticket-metrics"><span>观测 <b>${p.stats.viewed}</b></span><span>有效 <b>${p.stats.precision}</b></span><span>生命 <b>${p.stats.lives}/3</b></span><span>提示 <b>${1-(p.saved?.hints.size||0)}/1</b></span></div><span class="ticket-action">${p.status==='won'?'回顾解答':p.status==='lost'?'查看本局 / 可重开':p.status==='started'?'继续调查':'探索这颗行星'} <span>↗</span></span></button>`;}).join('')}</div></section>`).join('');
-    updateSaveNotice();
+    $('chapter-screen').style.setProperty('--star-color',chapterColors[index]);
+    $('chapter-select-kicker').textContent=index===0?'新手村 / 选择行星':'星系探索 / 选择行星';
+    $('chapter-select-title').textContent=chapter.name;
+    $('chapter-total-complete').textContent=`${members.filter(c=>caseStates.get(c.id)?.status==='won').length} / ${members.length} 已通关`;
+    $('chapter-missions').innerHTML=members.map((c,i)=>{const p=progressFor(c);return `<button class="mission-ticket ${p.status} ${mapSelection===c.id?'selected':''}" data-enter-case="${c.id}" aria-label="${c.title}，${c.difficulty}，${p.label}"><span class="planet-visual">${planetArt((i+index)%6)}</span><span class="planet-level">${c.difficulty.toUpperCase()} · PLANET ${String(c.chapter_position).padStart(2,'0')}</span><span class="ticket-top"><span class="ticket-number">${String(c.chapter_position).padStart(2,'0')}</span><span class="case-status ${p.status}">${p.label}</span></span><h3>${c.title}</h3><p class="ticket-teaser">${c.teaser}</p></button>`;}).join('');
   }
   function openChapter(id,{route=true,selection=null}={}){
     if(!CHAPTERS.some(ch=>ch.id===id))return;
-    cancelFlight();rememberDock(id);mapChapter=id;mapSelection=selection;showNavigationScreen('chapter-screen');renderChapter();document.title='Soup Lab · '+CHAPTERS.find(ch=>ch.id===id).name;
-    if(route)routeTo(null,id);window.scrollTo({top:0,behavior:'instant'});$('chapter-select-title').focus({preventScroll:true});
-    if(selection){const el=document.querySelector(`[data-enter-case="${selection}"]`);el?.scrollIntoView({block:'center',behavior:'instant'});el?.focus({preventScroll:true});}
+    const wasMap=!$('map-screen').hidden,wasOpen=$('chapter-screen').open;
+    cancelFlight();rememberDock(id);mapChapter=id;mapSelection=selection;
+    if(!wasMap)showNavigationScreen('map-screen');
+    renderMap();renderChapter();
+    if(!wasMap)$('galaxy-map').scrollIntoView({block:'center',behavior:'instant'});
+    document.title='Soup Lab · '+CHAPTERS.find(ch=>ch.id===id).name;
+    if(route)routeTo(null,id);
+    if(!wasOpen)$('chapter-screen').showModal();
+    document.body.style.overflow='hidden';$('chapter-missions').scrollTop=0;updateChapterScroll();
+    $('chapter-select-title').focus({preventScroll:true});
+    if(selection){const el=document.querySelector(`[data-enter-case="${selection}"]`);el?.scrollIntoView({block:'nearest',behavior:'instant'});el?.focus({preventScroll:true});}
   }
+  function dismissChapter(){
+    $('chapter-screen').close();routeTo(null,null,{replace:true});document.title='Soup Lab · 星系航图';
+    document.querySelector(`[data-region="${mapChapter}"]`)?.focus({preventScroll:true});
+  }
+  function updateChapterScroll(){
+    const list=$('chapter-missions');
+    $('chapter-scroll-note').textContent=list.scrollHeight>list.clientHeight+2?(list.scrollTop+list.clientHeight<list.scrollHeight-3?'向下滚动查看更多 ↓':'已显示全部行星'):`共 ${list.children.length} 颗行星`;
+  }
+  new ResizeObserver(updateChapterScroll).observe($('chapter-missions'));
+  $('chapter-missions').addEventListener('scroll',updateChapterScroll,{passive:true});
+  $('chapter-close').addEventListener('click',dismissChapter);
+  $('chapter-screen').addEventListener('cancel',e=>{e.preventDefault();dismissChapter();});
+  let chapterBackdropDown=false;
+  const outsideChapter=e=>{const r=$('chapter-screen').getBoundingClientRect();return e.clientX<r.left||e.clientX>r.right||e.clientY<r.top||e.clientY>r.bottom;};
+  $('chapter-screen').addEventListener('pointerdown',e=>{chapterBackdropDown=e.target===$('chapter-screen')&&outsideChapter(e);});
+  $('chapter-screen').addEventListener('click',e=>{if(chapterBackdropDown&&e.target===$('chapter-screen')&&outsideChapter(e))dismissChapter();chapterBackdropDown=false;});
   let chapterFilter='all',difficultyFilter='all';
   function renderLibrary(){
     $('chapter-filters').innerHTML=[{id:'all',name:'全部大关'},...CHAPTERS].map(c=>`<button data-chapter-filter="${c.id}" aria-pressed="${chapterFilter===c.id}">${c.name}</button>`).join('');
@@ -734,7 +783,7 @@ body.map-mode{background:#090f1e}
     if(index<0||index>=BANK.length)return;
     $('chapter-picker').open=false;$('chapter-picker').hidden=false;$('header-lesson').hidden=false;
     for(const d of document.querySelectorAll('dialog'))if(d.open)d.close();
-    document.body.style.overflow='';document.body.classList.remove('map-mode');$('map-screen').hidden=true;$('chapter-screen').hidden=true;$('game-screen').hidden=false;
+    document.body.style.overflow='';document.body.classList.remove('map-mode');$('map-screen').hidden=true;$('game-screen').hidden=false;
     cancelFlight();rememberDock(BANK[index].chapter.id);activeIndex=index;currentCase=BANK[index];DATA=currentCase.data;settings=currentCase.settings;
     if(!caseStates.has(currentCase.id))caseStates.set(currentCase.id,newState());state=caseStates.get(currentCase.id);
     clues=(DATA.clue_ids||defaultClues.map(c=>c.id)).map(id=>({...clueCatalog.find(c=>c.id===id),...(DATA.clue_overrides?.[id]||{})}));
@@ -773,9 +822,6 @@ body.map-mode{background:#090f1e}
   $('world-ledger').addEventListener('click',e=>{const b=e.target.closest('[data-open-chapter]');if(b)travelToChapter(b.dataset.openChapter);const row=e.target.closest('[data-ledger-case]');if(row){const c=BANK.find(c=>c.id===row.dataset.ledgerCase);travelToChapter(c.chapter.id,{selection:c.id});}});
   $('chapter-missions').addEventListener('click',e=>{const b=e.target.closest('[data-enter-case]');if(b)loadCase(BANK.findIndex(c=>c.id===b.dataset.enterCase));});
   $('map-resume').addEventListener('click',()=>{const c=BANK.find(c=>c.id===$('map-resume').dataset.resumeCase);travelToChapter(c.chapter.id,{selection:c.id});});
-  for(const id of ['chapter-home','chapter-home-bottom'])$(id).addEventListener('click',()=>openBank());
-  $('previous-chapter').addEventListener('click',()=>openChapter(CHAPTERS[CHAPTERS.findIndex(ch=>ch.id===mapChapter)-1]?.id));
-  $('next-chapter').addEventListener('click',()=>openChapter(CHAPTERS[CHAPTERS.findIndex(ch=>ch.id===mapChapter)+1]?.id));
   document.querySelector('.brand').addEventListener('click',e=>{e.preventDefault();openBank();});
   $('previous-case').addEventListener('click',()=>loadCase(activeIndex-1));$('next-case').addEventListener('click',()=>loadCase(activeIndex+1));
   $('next-result-button').addEventListener('click',()=>{if(activeIndex<BANK.length-1){const next=BANK[activeIndex+1];if(next.chapter.id!==currentCase.chapter.id)openChapter(next.chapter.id);else loadCase(activeIndex+1);}else openBank();});
@@ -788,7 +834,7 @@ body.map-mode{background:#090f1e}
     const changed=e.key?BANK.filter(c=>SAVE_PREFIX+c.id===e.key):BANK;
     for(const c of changed){try{caseStates.set(c.id,hydrateProgress(c,JSON.parse(localStorage.getItem(SAVE_PREFIX+c.id))));}catch{caseStates.set(c.id,newState(c));}}
     state=caseStates.get(currentCase.id)||state;
-    if(!$('map-screen').hidden)renderMap();else if(!$('chapter-screen').hidden)renderChapter();else if(changed.some(c=>c.id===currentCase.id)){loadCase(activeIndex,{route:false});$('announcement').textContent='已同步另一页面的最新答题记录。';}
+    if($('chapter-screen').open){const y=$('chapter-missions').scrollTop;renderMap();renderChapter();$('chapter-missions').scrollTop=y;}else if(!$('map-screen').hidden)renderMap();else if(changed.some(c=>c.id===currentCase.id)){loadCase(activeIndex,{route:false});$('announcement').textContent='已同步另一页面的最新答题记录。';}
   });
   restoreRoute();
 })();
